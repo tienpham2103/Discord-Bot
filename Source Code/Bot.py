@@ -32,4 +32,4 @@ async def on_message(message):
             except discord.Forbidden:
                 await message.channel.send("Không thể chia team. Vui lòng inbox admin")
 
-client.run('NzYxNzM0ODEwMTUwMjQwMjk2.X3e60w.HhUGD_W8GGoPMz__Kr2YsES5aeI')
+client.run('Your Token Here')
