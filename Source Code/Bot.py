@@ -80,4 +80,4 @@ async def Trivia(message):
                 connection.close()
 
 if __name__ == '__main__':
-    client.run('NzYxNzM0ODEwMTUwMjQwMjk2.X3e60w.n2aQrRbDq-wFF9RGl6KQiE-2lF0')
+    client.run('Your-Token-Here')
