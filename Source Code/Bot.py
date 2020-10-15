@@ -2,6 +2,7 @@ import discord
 import mysql.connector
 from mysql.connector import Error
 import asyncio
+import time
 
 client = discord.Client()
 
@@ -67,17 +68,48 @@ async def Trivia(message):
                                                  database='triviadb',
                                                  user='root',
                                                  password='Conga1234!@')
-            if connection.is_connected():
-                if str(reaction) == "🇦":
-                    await message.channel.send("You picked Animal")
-                elif str(reaction) == '🇧':
-                    await message.channel.send("You picked Country")
+
+            if str(reaction) == "🇦":
+                #await message.channel.send("You picked Animal")
+                count = 1
+                while (1):
+                    sql_select_question_query = "select question, answer_a, answer_b, answer_c, answer_d from " \
+                                                "animal_vietnamese where question_id = " + str(count)
+                    count += 1
+                    cursor = connection.cursor()
+                    cursor.execute(sql_select_question_query)
+                    records = cursor.fetchall()
+                    print("total number of rows is: ", cursor.rowcount)
+                    #for row in records:
+                    question_string = str(records[0][0])
+                    answer_a_string = str(records[0][1])
+                    answer_b_string = str(records[0][2])
+                    answer_c_string = str(records[0][3])
+                    answer_d_string = str(records[0][4])
+
+                    bot_question_string = "```" + question_string \
+                                          + ":\nA. " + answer_a_string \
+                                          + "\nB. " + answer_b_string \
+                                          + "\nC. " + answer_c_string \
+                                          + "\nD. " + answer_d_string + "```"
+                    bot_question_msg = await message.channel.send(bot_question_string)
+
+                    await bot_question_msg.add_reaction('\U0001f1e6')
+                    await bot_question_msg.add_reaction('\U0001f1e7')
+                    await bot_question_msg.add_reaction('\U0001f1e8')
+                    await bot_question_msg.add_reaction('\U0001f1e9')
+
+                    time.sleep(7)
+
+            elif str(reaction) == '🇧':
+                await message.channel.send("You picked Country")
         except Error as e:
             print("Error while connecting to database", e)
         finally:
-            if connection.is_connected():
+            if (connection.is_connected()):
                 cursor.close()
                 connection.close()
+
 
 if __name__ == '__main__':
     client.run('Your-Token-Here')
